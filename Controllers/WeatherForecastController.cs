@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IList<CityWeather> Get()
+        public ResponseMessage<CityWeather> Get()
         {
             var result = JsonConvert.DeserializeObject<RawData>(Constants.Data);
             List<CityWeather> datas = new List<CityWeather>();
@@ -39,7 +39,12 @@ namespace WebApi.Controllers
                 city.mainHumidity = item.main.Humidity;
                 datas.Add(city);
             }
-            return datas;
+            var response = new ResponseMessage<CityWeather>();
+            response.statusCode = System.Net.HttpStatusCode.OK;
+            response.message = "Current weather information of cities";
+            response.data = datas;
+
+            return response;
         }
     }
 }
