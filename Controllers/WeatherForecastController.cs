@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public ResponseMessage<CityWeather> Get()
         {
-            var result = JsonConvert.DeserializeObject<RawData>(Constants.Data);
+            var result = JsonConvert.DeserializeObject<RawData>(CurrentSession.Instance.RawWeatherData);
             List<CityWeather> datas = new List<CityWeather>();
             foreach (var item in result.Details)
             {

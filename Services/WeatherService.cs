@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,13 +9,28 @@ namespace WebApi.Services
 {
     public class WeatherService
     {
-        public async Task<HttpResponseMessage> GetAll()
-        {
-            HttpClient _client = new HttpClient();
+        static readonly Lazy<WeatherService> _instance = new Lazy<WeatherService>();
+        private HttpClient _client { get; set; }
 
-            HttpResponseMessage a = new HttpResponseMessage();
-            a = await _client.PostAsync(Constants.WeatherApiUrl, null).ConfigureAwait(false);
-            return a;
+        public WeatherService()
+        {
+            _client = new HttpClient();
+        }
+
+        public static WeatherService Instance
+        {
+            get
+            {
+                return _instance.Value;
+            }
+        }
+
+        public async Task<string> GetAll()
+        {
+            HttpResponseMessage response = await _client.PostAsync(Constants.WeatherApiUrl, null);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
         }
     }
 }

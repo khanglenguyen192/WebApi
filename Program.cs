@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -13,7 +14,9 @@ namespace WebApi
     {
         public static void Main(string[] args)
         {
+            CurrentSession.Instance.RawWeatherData = WeatherService.Instance.GetAll().Result;
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
